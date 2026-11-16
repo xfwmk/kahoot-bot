@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         kahoot-bots
 // @namespace    https://github.com/xfwmk/smartrevise-bots/
-// @version      1.5
+// @version      1
 // @description  Kahoot autosolver
 // @match        kahoot.it/*
 // @connect      api.groq.com
