@@ -169,3 +169,106 @@ Do not write anything except the number.
             answers: realAnswers
         };
     }
+    
+    async function waitForQuestion() {
+
+        for (;;) {
+
+            if (!running) {
+                return null;
+            }
+
+            const data = getQuestion();
+
+            if (data) {
+                return data;
+            }
+
+            await sleep(500);
+        }
+    }
+
+    async function answerCurrentQuestion() {
+
+        const data = await waitForQuestion();
+
+        if (!data) {
+            return;
+        }
+
+        console.log('================================');
+        console.log('Question:', data.question);
+        console.log('Answers:', data.answers.map(a => a.text));
+
+        console.log('Asking Groq...');
+
+        const answerIndex =
+            await askGroq(
+                data.question,
+                data.answers.map(a => a.text)
+            );
+
+        console.log('AI chose:', answerIndex);
+
+        if (
+            answerIndex < 0 ||
+            answerIndex >= data.answers.length
+        ) {
+            throw new Error(
+                `AI returned invalid answer index: ${answerIndex}`
+            );
+        }
+
+        const chosen =
+            data.answers[answerIndex];
+
+        console.log('Clicking:', chosen.text);
+
+        await sleep(1000);
+
+        const button =
+            chosen.element.querySelector('.js_answerButton');
+
+        if (!button) {
+            throw new Error('Could not find answer button.');
+        }
+
+        button.click();
+
+        console.log('Answer clicked.');
+
+        for (let i = 0; i < 100; i++) {
+
+            const advice =
+                document.querySelector('#advicecontainer');
+
+            if (
+                advice &&
+                !advice.classList.contains('kt-hidden')
+            ) {
+                break;
+            }
+
+            await sleep(200);
+        }
+
+        console.log('Result received.');
+
+        await sleep(1500);
+
+        const next =
+            document.querySelector('#lnkNext');
+
+        if (!next) {
+            console.log('No Next Question button found.');
+            console.log('Stopping.');
+            running = false;
+            return;
+        }
+
+        console.log('Going to next question...');
+
+        next.click();
+
+        await sleep(1500);
+    }
