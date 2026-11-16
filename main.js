@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         smartrevise-bots
+// @name         kahoot-bots
 // @namespace    https://github.com/xfwmk/smartrevise-bots/
 // @version      1.5
 // @description  Kahoot autosolver
