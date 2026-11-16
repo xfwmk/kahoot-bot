@@ -124,3 +124,48 @@ Do not write anything except the number.
             });
         });
     }
+    
+    function getQuestion() {
+
+        const questionElement =
+            document.querySelector('#questiontext');
+
+        if (!questionElement) {
+            return null;
+        }
+
+        const question =
+            questionElement.innerText.trim();
+
+        const answerElements = [
+            ...document.querySelectorAll(
+                '#answercontainer .col-12.mb-1'
+            )
+        ];
+
+        const answers = answerElements
+            .map(element => {
+
+                const button =
+                    element.querySelector('.js_answerButton');
+
+                if (!button) {
+                    return null;
+                }
+
+                return {
+                    text: element.innerText.trim(),
+                    element: element
+                };
+            })
+            .filter(Boolean);
+
+        if (!question || realAnswers.length === 0) {
+            return null;
+        }
+
+        return {
+            question,
+            answers: realAnswers
+        };
+    }
