@@ -33,7 +33,7 @@
                 .join('\n');
 
             const prompt = `
-You are answering a multiple-choice computer science question.
+You are answering a multiple-choice question.
 
 Question:
 ${question}
